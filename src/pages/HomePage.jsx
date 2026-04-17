@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Navbar from '../components/Layout/Navbar'
 import HeroBanner from '../components/Banners/HeroBanner'
 import SectionBlock from '../components/Rows/SectionBlock'
-import Top10Row from '../components/rows/Top10Row'
+import Top10Row from '../components/Rows/Top10Row'
 import Loader from '../components/ui/Loader'
 import ErrorMessage from '../components/ui/ErrorMessage'
 import {
