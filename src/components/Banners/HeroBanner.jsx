@@ -1,4 +1,4 @@
-const BACKDROP_BASE_URL = 'https://image.tmdb.org/t/p/original'
+import { BACKDROP_BASE_URL } from "../../services/tmdb"
 
 export default function HeroBanner({ item }) {
   if (!item || !item.backdrop_path) {

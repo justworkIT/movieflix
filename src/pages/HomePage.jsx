@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import Navbar from '../components/Navbar'
-import HeroBanner from '../components/HeroBanner'
-import SectionBlock from '../components/SectionBlock'
-import Top10Row from '../components/Top10Row'
+import Navbar from '../components/Layout/Navbar'
+import HeroBanner from '../components/Banners/HeroBanner'
+import SectionBlock from '../components/Rows/SectionBlock'
+import Top10Row from '../components/rows/Top10Row'
+import Loader from '../components/ui/Loader'
+import ErrorMessage from '../components/ui/ErrorMessage'
 import {
   getNetflixOriginalMovies,
   getTrendingMovies,
@@ -56,8 +58,8 @@ export default function HomePage() {
       <HeroBanner item={featuredMovie} />
 
       <main className="relative z-10 -mt-16 space-y-10 px-4 pb-12 md:px-8 lg:px-12">
-        {loading && <p className="text-sm text-zinc-400">Loading content...</p>}
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        {loading && <Loader text="Loading content..." />}
+        {error && <ErrorMessage message={error} />}
 
         <section className="space-y-8">
           <h3 className="text-4xl font-bold relative top-5 text-red-600">Movies</h3>

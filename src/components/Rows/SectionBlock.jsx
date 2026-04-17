@@ -1,4 +1,4 @@
-import RowPlaceholder from './RowPlaceholder'
+import MediaRow from './MediaRow'
 
 export default function SectionBlock({ title, rows = [] }) {
   return (
@@ -7,7 +7,7 @@ export default function SectionBlock({ title, rows = [] }) {
 
       <div className="space-y-8">
         {rows.map((row) => (
-          <RowPlaceholder
+          <MediaRow
             key={row.title}
             title={row.title}
             items={row.items}

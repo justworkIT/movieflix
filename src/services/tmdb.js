@@ -1,6 +1,7 @@
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY
 const BASE_URL = 'https://api.themoviedb.org/3'
-
+export const BACKDROP_BASE_URL = 'https://image.tmdb.org/t/p/original'
+export const POSTER_BASE_URL = 'https://image.tmdb.org/t/p/w500'
 export async function getRecommendations(mediaType, id) {
   const data = await fetchFromTMDB(
     `/${mediaType}/${id}/recommendations?language=en-US`

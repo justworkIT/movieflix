@@ -1,3 +1,7 @@
+import Loader from '../components/ui/Loader'
+import ErrorMessage from '../components/ui/ErrorMessage'
+import MediaRow from '../components/Rows/MediaRow'
+import { POSTER_BASE_URL, BACKDROP_BASE_URL } from '../services/tmdb'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
@@ -5,10 +9,6 @@ import {
   getVideos,
   getRecommendations,
 } from '../services/tmdb'
-import RowPlaceholder from '../components/RowPlaceholder'
-
-const BACKDROP_BASE_URL = 'https://image.tmdb.org/t/p/original'
-const POSTER_BASE_URL = 'https://image.tmdb.org/t/p/w500'
 
 export default function DetailsPage() {
   const { mediaType, id } = useParams()
@@ -50,22 +50,11 @@ export default function DetailsPage() {
   }, [mediaType, id])
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#141414] px-6 py-10 text-white">
-        Loading details...
-      </div>
-    )
+    return <Loader />
   }
 
   if (error || !details) {
-    return (
-      <div className="min-h-screen bg-[#141414] px-6 py-10 text-white">
-        <p>{error || 'No details found.'}</p>
-        <Link to="/" className="mt-4 inline-block text-red-500">
-          ← Back to Home
-        </Link>
-      </div>
-    )
+    return <ErrorMessage message={error} />
   }
 
   return (
@@ -196,7 +185,7 @@ export default function DetailsPage() {
       <section className="px-6 py-10 md:px-12">
         <h2 className="mb-4 text-2xl font-bold">More Like This</h2>
 
-        <RowPlaceholder
+        <MediaRow
           title=""
           items={recommendations}
           mediaType={mediaType}
