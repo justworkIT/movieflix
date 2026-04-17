@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+/* Hide scrollbar for Chrome, Safari, Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge, Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.top10-number {
+  -webkit-text-stroke: 2px #e5e7eb;
+  color: transparent;
+}
+
+@media (min-width: 768px) {
+  .top10-number {
+    -webkit-text-stroke: 3px #e5e7eb;
+  }
+}

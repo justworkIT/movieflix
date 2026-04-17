@@ -28,15 +28,15 @@ export default function MediaRow({ title, items = [], mediaType = 'movie' }) {
 
   return (
     <section className="mb-8">
-      <div className="mb-3 flex items-center justify-between px-6">
+      <div className="mb-3 px-6">
         <h2 className="text-xl font-bold text-white">{title}</h2>
       </div>
 
-      <div className="group relative">
+      <div className="relative">
         <button
           type="button"
           onClick={() => scrollRow('left')}
-          className="absolute left-2 top-1/2 z-20 hidden -translate-y-1/2 rounded-full bg-black/70 px-3 py-2 text-2xl text-white transition hover:bg-black/90 md:block"
+          className="absolute left-0 top-2 z-20 hidden h-[210px] w-[46px] items-center justify-center rounded-none bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex md:h-[240px] md:w-[53px] lg:h-[270px] lg:w-[60px]"
           aria-label={`Scroll ${title} left`}
         >
           ‹
@@ -44,7 +44,7 @@ export default function MediaRow({ title, items = [], mediaType = 'movie' }) {
 
         <div
           ref={rowRef}
-          className="flex gap-4 overflow-x-auto px-6 py-2 scrollbar-hide snap-x snap-mandatory"
+          className="flex gap-3 overflow-x-auto px-6 py-2 scrollbar-hide snap-x snap-mandatory"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {filteredItems.map((item) => (
@@ -57,7 +57,7 @@ export default function MediaRow({ title, items = [], mediaType = 'movie' }) {
                 <img
                   src={`${POSTER_BASE_URL}${item.poster_path}`}
                   alt={item.title || item.name}
-                  className="h-[210px] w-full object-cover transition duration-300 group-hover/card:scale-105 sm:h-[240px] md:h-[270px]"
+                  className="h-[210px] w-full object-cover transition duration-300 group-hover/card:scale-125 sm:h-[240px] md:h-[270px]"
                   draggable="false"
                 />
               </div>
@@ -74,7 +74,7 @@ export default function MediaRow({ title, items = [], mediaType = 'movie' }) {
         <button
           type="button"
           onClick={() => scrollRow('right')}
-          className="absolute right-2 top-1/2 z-20 hidden -translate-y-1/2 rounded-full bg-black/70 px-3 py-2 text-2xl text-white transition hover:bg-black/90 md:block"
+          className="absolute right-0 top-2 z-20 hidden h-[210px] w-[46px] items-center justify-center rounded-none bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex md:h-[240px] md:w-[53px] lg:h-[270px] lg:w-[60px]"
           aria-label={`Scroll ${title} right`}
         >
           ›
