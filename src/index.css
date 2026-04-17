@@ -12,12 +12,17 @@
 }
 
 .top10-number {
-  -webkit-text-stroke: 2px #e5e7eb;
-  color: transparent;
+  color: #1b1b1b;
+  text-shadow:
+    1px 1px 0 #ffffff,
+    -1px 1px 0 #ffffff,
+    1px -1px 0 #ffffff,
+    -1px -1px 0 #ffffff,
+    0 2px 4px rgba(255, 255, 255, 0.8);
 }
 
 @media (min-width: 768px) {
   .top10-number {
-    -webkit-text-stroke: 3px #e5e7eb;
+    -webkit-text-stroke: 2px #ffffff;
   }
 }
