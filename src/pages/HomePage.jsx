@@ -2,34 +2,42 @@ import { useEffect, useState } from 'react'
 import Navbar from '../components/Layout/Navbar'
 import HeroBanner from '../components/Banners/HeroBanner'
 import SectionBlock from '../components/Rows/SectionBlock'
-import Top10Row from '../components/Rows/Top10Row'
+import Top20Row from '../components/Rows/Top20Row'
 import Loader from '../components/ui/Loader'
 import ErrorMessage from '../components/ui/ErrorMessage'
 import {
   getNetflixOriginalMovies,
+  getPopularMovies,
   getTrendingMovies,
   getTrendingTVShows,
+  getPopularTVShows,
 } from '../services/tmdb'
 
 export default function HomePage() {
   const [trendingMovies, setTrendingMovies] = useState([])
+  const [popularMovies, setPopularMovies] = useState([])
   const [netflixOriginalMovies, setNetflixOriginalMovies] = useState([])
   const [trendingTVShows, setTrendingTVShows] = useState([])
+  const [popularTVShows, setPopularTVShows] = useState([])  
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
     async function loadData() {
       try {
-        const [movies, originals, tvShows] = await Promise.all([
+        const [top20movies, popularmovies, originals, top20tvShows, populartvshows] = await Promise.all([
           getTrendingMovies(),
+          getPopularMovies(),          
           getNetflixOriginalMovies(),
           getTrendingTVShows(),
+          getPopularTVShows(),
         ])
 
-        setTrendingMovies(movies)
+        setTrendingMovies(top20movies)
+        setPopularMovies(popularmovies)
         setNetflixOriginalMovies(originals)
-        setTrendingTVShows(tvShows)
+        setTrendingTVShows(top20tvShows)
+        setPopularTVShows(populartvshows)
       } catch (error) {
         console.error(error)
         setError('Failed to load content')
@@ -45,11 +53,11 @@ export default function HomePage() {
 
   const movieRows = [
     { title: 'Netflix Originals', items: netflixOriginalMovies, mediaType: 'movie' },
-    { title: 'Trending Movies', items: trendingMovies, mediaType: 'movie' },
+    { title: 'Popular Movies', items: popularMovies, mediaType: 'movie' },
   ]
 
   const tvRows = [
-    { title: 'Trending TV Shows', items: trendingTVShows, mediaType: 'tv' },
+    { title: 'Popular TV Shows', items: popularTVShows, mediaType: 'tv' },
   ]
 
   return (
@@ -63,8 +71,8 @@ export default function HomePage() {
 
         <section className="space-y-8">
           <h3 className="text-4xl font-bold relative top-5 text-red-600">Movies</h3>
-          <Top10Row
-            title="Netflix Top 10"
+          <Top20Row
+            title="Top 20 Movies of the Week"
             items={trendingMovies}
             mediaType="movie"
           />
@@ -73,8 +81,8 @@ export default function HomePage() {
 
         <section className="space-y-8">
           <h3 className="text-4xl font-bold text-red-600">TV Shows</h3>
-          <Top10Row
-            title="Netflix Top 10"
+          <Top20Row
+            title="Top 20 TV Shows of the Week"
             items={trendingTVShows}
             mediaType="tv"
           />

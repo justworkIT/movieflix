@@ -1,26 +1,28 @@
 export default function Navbar() {
   return (
-    <header className="fixed top-0 z-50 w-full bg-gradient-to-b from-black/80 to-transparent">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <h1 className="text-2xl font-bold tracking-wide text-red-600">
-          MOVIEFLIX
-        </h1>
+    <nav className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-sm">
+      <div className="flex items-center px-4 sm:px-6 py-3 sm:py-4">
 
-        <nav className="hidden gap-6 text-sm text-zinc-200 md:flex">
-          <a href="#" className="transition hover:text-white">
-            Home
-          </a>
-          <a href="#" className="transition hover:text-white">
-            Movies
-          </a>
-          <a href="#" className="transition hover:text-white">
-            TV Shows
-          </a>
-          <a href="#" className="transition hover:text-white">
-            My List
-          </a>
-        </nav>
+        {/* LEFT GROUP */}
+        <div className="flex items-center min-w-0">
+
+          {/* Logo */}
+          <div className="text-red-600 text-lg sm:text-2xl md:text-3xl font-extrabold tracking-wide whitespace-nowrap">
+            MovieFlix
+          </div>
+
+          {/* Nav Links */}
+          <div className="ml-4 sm:ml-8 flex gap-3 sm:gap-6 text-xs sm:text-sm text-white whitespace-nowrap overflow-hidden">
+            <a className="hover:text-gray-300 transition">Home</a>
+            <a className="hover:text-gray-300 transition">Movies</a>
+            <a className="hover:text-gray-300 transition">TV Shows</a>
+            <a className="hidden sm:block hover:text-gray-300 transition">My List</a>
+            <a className="hover:text-gray-300 transition">Search</a>            
+          </div>
+
+        </div>
+
       </div>
-    </header>
+    </nav>
   )
 }
