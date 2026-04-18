@@ -95,28 +95,46 @@ async function fetchFromTMDB(endpoint) {
 }
 
 export async function getTrendingMovies() {
-  const data = await fetchFromTMDB('/trending/movie/day?watch_region=PH')
+  const data = await fetchFromTMDB('/trending/movie/day')
   return data.results || []
 }
 
 export async function getPopularMovies() {
-  const data = await fetchFromTMDB('/discover/movie?watch_region=PH&sort_by=popularity.desc')
+  const data = await fetchFromTMDB('/discover/movie?sort_by=popularity.desc')
   return data.results || []
 }
 
 export async function getTrendingTVShows() {
-  const data = await fetchFromTMDB('/trending/tv/day?watch_region=PH')
+  const data = await fetchFromTMDB('/trending/tv/day')
   return data.results || []
 }
 
 export async function getPopularTVShows() {
-  const data = await fetchFromTMDB('/discover/tv?watch_region=PH&sort_by=popularity.desc')
+  const data = await fetchFromTMDB('/discover/tv?sort_by=popularity.desc')
+  return data.results || []
+}
+export async function getNowPlayingMovies(region = 'PH') {
+  const data = await fetchFromTMDB(
+    `/movie/now_playing?region=${region}&page=1`
+  )
+  return data.results || []
+}
+export async function getNetflixOriginalMovies() {
+  const data = await fetchFromTMDB(
+    '/discover/movie?sort_by=primary_release_date.desc&with_watch_providers=8&watch_region=PH'
+  )
   return data.results || []
 }
 
-export async function getNetflixOriginalMovies() {
+export async function getDisneyPlusMovies() {
   const data = await fetchFromTMDB(
-    '/discover/movie?sort_by=popularity.desc&with_watch_providers=8&watch_region=PH'
+    '/discover/movie?sort_by=primary_release_date.desc&with_watch_providers=337&watch_region=PH'
+  )
+  return data.results || []
+}
+export async function gethbomaxMovies() {
+  const data = await fetchFromTMDB(
+    '/discover/movie?with_watch_providers=1899&watch_region=PH&sort_by=primary_release_date.desc'
   )
   return data.results || []
 }

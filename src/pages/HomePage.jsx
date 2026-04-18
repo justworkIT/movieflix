@@ -7,6 +7,9 @@ import Loader from '../components/ui/Loader'
 import ErrorMessage from '../components/ui/ErrorMessage'
 import {
   getNetflixOriginalMovies,
+  getDisneyPlusMovies,
+  gethbomaxMovies,
+  getNowPlayingMovies,
   getPopularMovies,
   getTrendingMovies,
   getTrendingTVShows,
@@ -16,7 +19,10 @@ import {
 export default function HomePage() {
   const [trendingMovies, setTrendingMovies] = useState([])
   const [popularMovies, setPopularMovies] = useState([])
+  const [nowplayingMovies, setnowplayingMovies] = useState([])
   const [netflixOriginalMovies, setNetflixOriginalMovies] = useState([])
+  const [disneyplusMovies, setdisneyplusMovies] = useState([])  
+  const [hbomaxMovies, sethbomaxMovies] = useState([])  
   const [trendingTVShows, setTrendingTVShows] = useState([])
   const [popularTVShows, setPopularTVShows] = useState([])  
   const [loading, setLoading] = useState(true)
@@ -25,17 +31,23 @@ export default function HomePage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [top20movies, popularmovies, originals, top20tvShows, populartvshows] = await Promise.all([
+        const [top20movies, popularmovies, nowplaying, originals, disneyplus, hbomax, top20tvShows, populartvshows] = await Promise.all([
           getTrendingMovies(),
           getPopularMovies(),          
+          getNowPlayingMovies(),          
           getNetflixOriginalMovies(),
+          getDisneyPlusMovies(),
+          gethbomaxMovies(),
           getTrendingTVShows(),
           getPopularTVShows(),
         ])
 
         setTrendingMovies(top20movies)
         setPopularMovies(popularmovies)
+        setnowplayingMovies(nowplaying)
         setNetflixOriginalMovies(originals)
+        setdisneyplusMovies(disneyplus)
+        sethbomaxMovies(hbomax)
         setTrendingTVShows(top20tvShows)
         setPopularTVShows(populartvshows)
       } catch (error) {
@@ -52,7 +64,10 @@ export default function HomePage() {
   const featuredMovie = trendingMovies[0]
 
   const movieRows = [
+    { title: 'In Cinema', items: nowplayingMovies, mediaType: 'movie' },
     { title: 'Netflix Originals', items: netflixOriginalMovies, mediaType: 'movie' },
+    { title: 'Disney Plus Movies', items: disneyplusMovies, mediaType: 'movie' },
+    { title: 'HBO Max Movies', items: hbomaxMovies, mediaType: 'movie' },
     { title: 'Popular Movies', items: popularMovies, mediaType: 'movie' },
   ]
 
