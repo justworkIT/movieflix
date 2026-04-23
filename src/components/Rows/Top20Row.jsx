@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { POSTER_BASE_URL, getYear, getGenres, getRegion } from '../../services/tmdb'
+import { getDetailsPath } from '../../utils/slugify'
 export default function Top20Row({ title, items = [], mediaType = 'movie' }) {
   const rowRef = useRef(null)
 
@@ -49,7 +50,7 @@ export default function Top20Row({ title, items = [], mediaType = 'movie' }) {
 {filteredItems.map((item, index) => (
   <Link
     key={item.id}
-    to={`/${mediaType}/${item.id}`}
+    to={getDetailsPath(item, mediaType)}
     className="group/card flex-none snap-start w-[140px] sm:w-[160px] md:w-[180px]"
   >
     <div className="relative overflow-hidden rounded-md">

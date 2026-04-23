@@ -153,3 +153,40 @@ export async function getVideos(mediaType, id) {
   const data = await fetchFromTMDB(`/${mediaType}/${id}/videos?language=en-US`)
   return data.results || []
 }
+
+export async function getCredits(mediaType, id) {
+  const response = await fetch(
+    `${BASE_URL}/${mediaType}/${id}/credits?api_key=${API_KEY}`
+  )
+
+  if (!response.ok) {
+    throw new Error('Failed to load credits')
+  }
+
+  const data = await response.json()
+  return data.cast || []
+}
+export async function getPersonDetails(personId) {
+  const response = await fetch(
+    `${BASE_URL}/person/${personId}?api_key=${API_KEY}&language=en-US`
+  )
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch person details')
+  }
+
+  return response.json()
+}
+
+export async function getPersonCredits(personId) {
+  const response = await fetch(
+    `${BASE_URL}/person/${personId}/combined_credits?api_key=${API_KEY}&language=en-US`
+  )
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch person credits')
+  }
+
+  const data = await response.json()
+  return data.cast || []
+}

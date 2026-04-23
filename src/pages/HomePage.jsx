@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useEffect, useState } from 'react'
 import Navbar from '../components/Layout/Navbar'
 import HeroBanner from '../components/Banners/HeroBanner'
@@ -76,7 +77,15 @@ export default function HomePage() {
   ]
 
   return (
+    
     <div className="min-h-screen bg-[#141414] text-white">
+      <Helmet>
+        <title>MovieFlix - Home</title>
+        <meta
+          name="description"
+          content="Browse trending movies and TV shows on MovieFlix."
+        />
+      </Helmet>
       <Navbar />
       <HeroBanner item={featuredMovie} />
 

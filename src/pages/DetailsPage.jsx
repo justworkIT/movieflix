@@ -1,41 +1,55 @@
+import { Helmet } from 'react-helmet-async'
 import Loader from '../components/ui/Loader'
 import ErrorMessage from '../components/ui/ErrorMessage'
 import MediaRow from '../components/Rows/MediaRow'
+import CastSection from '../components/Details/CastSection'
 import { POSTER_BASE_URL, BACKDROP_BASE_URL } from '../services/tmdb'
-import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   getDetails,
   getVideos,
   getRecommendations,
+  getCredits,
 } from '../services/tmdb'
+import { slugify } from '../utils/slugify'
 
 export default function DetailsPage() {
-  const { mediaType, id } = useParams()
+  const { mediaType, id, slug } = useParams()
+  const navigate = useNavigate()
 
   const [details, setDetails] = useState(null)
   const [trailer, setTrailer] = useState(null)
   const [recommendations, setRecommendations] = useState([])
+  const [cast, setCast] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
     async function loadDetails() {
       try {
-        const [detailData, videoData, recData] = await Promise.all([
+        const [detailData, videoData, recData, castData] = await Promise.all([
           getDetails(mediaType, id),
           getVideos(mediaType, id),
           getRecommendations(mediaType, id),
+          getCredits(mediaType, id),
         ])
 
         setDetails(detailData)
         setRecommendations(recData)
+        setCast(castData)
 
         const officialTrailer = videoData.find(
           (video) => video.site === 'YouTube' && video.type === 'Trailer'
         )
 
         setTrailer(officialTrailer || null)
+
+        const correctSlug = slugify(detailData.title || detailData.name || '')
+
+        if (correctSlug && slug !== correctSlug) {
+          navigate(`/${mediaType}/${id}/${correctSlug}`, { replace: true })
+        }
       } catch (err) {
         console.error(err)
         setError('Failed to load details')
@@ -47,18 +61,45 @@ export default function DetailsPage() {
     setLoading(true)
     setError('')
     loadDetails()
-  }, [mediaType, id])
+  }, [mediaType, id, slug, navigate])
 
-  if (loading) {
-    return <Loader />
-  }
+  const mediaTitle = details?.title || details?.name || 'Details'
+  const releaseYear = (details?.release_date || details?.first_air_date || '').slice(0, 4)
+
+  const topTwoCast = cast
+    .slice(0, 2)
+    .map((person) => person.name)
+    .filter(Boolean)
+
+  const seoTitle = useMemo(() => {
+    const parts = []
+    const titleWithYear = releaseYear ? `${mediaTitle} (${releaseYear})` : mediaTitle
+
+    parts.push(titleWithYear)
+
+    if (topTwoCast[0]) parts.push(topTwoCast[0])
+    if (topTwoCast[1]) parts.push(topTwoCast[1])
+
+    parts.push('MovieFlix')
+
+    return parts.join(' | ')
+  }, [mediaTitle, releaseYear, topTwoCast])
+
+  const seoDescription = details?.overview || `Watch ${mediaTitle} on MovieFlix.`
+
+  if (loading) return <Loader />
 
   if (error || !details) {
-    return <ErrorMessage message={error} />
+    return <ErrorMessage message={error || 'Failed to load details'} />
   }
 
   return (
     <div className="min-h-screen bg-[#141414] text-white">
+      <Helmet>
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
+      </Helmet>
+
       <section
         className="relative min-h-[70vh] bg-cover bg-center"
         style={{
@@ -84,14 +125,14 @@ export default function DetailsPage() {
                 {details.poster_path && (
                   <img
                     src={`${POSTER_BASE_URL}${details.poster_path}`}
-                    alt={details.title || details.name}
-                    className="w-[220px] h-[300px] rounded shadow-xl"
+                    alt={mediaTitle}
+                    className="h-[300px] w-[220px] rounded shadow-xl"
                   />
                 )}
 
                 <div className="max-w-2xl">
                   <h1 className="mb-4 text-4xl font-bold md:text-6xl">
-                    {details.title || details.name}
+                    {mediaTitle}
                   </h1>
 
                   <div className="mb-4 flex flex-wrap gap-4 text-sm text-zinc-300">
@@ -103,6 +144,12 @@ export default function DetailsPage() {
 
                     {details.runtime ? <span>{details.runtime} min</span> : null}
                   </div>
+
+                  {topTwoCast.length > 0 ? (
+                    <p className="mb-4 text-sm text-zinc-300">
+                      Starring: {topTwoCast.join(', ')}
+                    </p>
+                  ) : null}
 
                   <p className="mb-6 max-w-2xl text-zinc-200">
                     {details.overview || 'No overview available.'}
@@ -140,14 +187,14 @@ export default function DetailsPage() {
               {details.poster_path && (
                 <img
                   src={`${POSTER_BASE_URL}${details.poster_path}`}
-                  alt={details.title || details.name}
+                  alt={mediaTitle}
                   className="w-[220px] rounded shadow-xl"
                 />
               )}
 
               <div className="max-w-3xl">
                 <h1 className="mb-4 text-4xl font-bold md:text-6xl">
-                  {details.title || details.name}
+                  {mediaTitle}
                 </h1>
 
                 <div className="mb-4 flex flex-wrap gap-4 text-sm text-zinc-300">
@@ -159,6 +206,12 @@ export default function DetailsPage() {
 
                   {details.runtime ? <span>{details.runtime} min</span> : null}
                 </div>
+
+                {topTwoCast.length > 0 ? (
+                  <p className="mb-4 text-sm text-zinc-300">
+                    Starring: {topTwoCast.join(', ')}
+                  </p>
+                ) : null}
 
                 <p className="mb-6 max-w-2xl text-zinc-200">
                   {details.overview || 'No overview available.'}
@@ -182,14 +235,11 @@ export default function DetailsPage() {
         </div>
       </section>
 
+      <CastSection cast={cast} />
+
       <section className="px-6 py-10 md:px-12">
         <h2 className="mb-4 text-2xl font-bold">More Like This</h2>
-
-        <MediaRow
-          title=""
-          items={recommendations}
-          mediaType={mediaType}
-        />
+        <MediaRow title="" items={recommendations} mediaType={mediaType} />
       </section>
     </div>
   )
