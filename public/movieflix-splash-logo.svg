@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">MovieFlix Splash M</title>
+  <desc id="desc">Animated premium splash logo with glowing red M on black background.</desc>
+  <defs>
+    <linearGradient id="mGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff5864"/>
+      <stop offset="55%" stop-color="#ff0015"/>
+      <stop offset="100%" stop-color="#8b0000"/>
+    </linearGradient>
+
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="8" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="b2"/>
+      <feMerge>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <linearGradient id="spark" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ff3b3b" stop-opacity="0"/>
+      <stop offset="55%" stop-color="#ff4136" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#ffb36b" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" fill="#000"/>
+
+  <g opacity=".95">
+    <ellipse cx="262" cy="282" rx="155" ry="120" fill="#b30012">
+      <animate attributeName="opacity" values=".10;.22;.10" dur="2.4s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="262" cy="282" rx="205" ry="165" fill="#ff0015">
+      <animate attributeName="opacity" values=".04;.12;.04" dur="2.4s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+
+  <g filter="url(#glow)">
+    <path d="M110 390 L190 120 H250 L300 250 L360 120 H430 L390 390 L325 418 L348 240 L287 360 L252 360 L198 240 L168 390 Z"
+          fill="url(#mGrad)">
+      <animate attributeName="opacity" values="0;1;1" dur="1.1s" fill="freeze"/>
+    </path>
+
+    <path d="M64 430 L177 385 L147 408 L28 454 Z" fill="#ff1a1a" opacity=".95">
+      <animate attributeName="opacity" values="0;0;1;1" dur="1.3s" fill="freeze"/>
+    </path>
+    <path d="M90 395 L188 355 L173 370 L62 410 Z" fill="#ff6a6a" opacity=".66">
+      <animate attributeName="opacity" values="0;0;1;1" dur="1.5s" fill="freeze"/>
+    </path>
+    <path d="M186 120 L204 120 L173 248 L159 248 Z" fill="#ffd1d1" opacity=".66">
+      <animate attributeName="opacity" values="0;0;1;1" dur=".9s" fill="freeze"/>
+    </path>
+  </g>
+
+  <path d="M26 454 C85 426, 128 408, 179 385" stroke="url(#spark)" stroke-width="7" fill="none" stroke-linecap="round">
+    <animate attributeName="stroke-dasharray" values="0 240;120 120;0 240" dur="1.5s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-dashoffset" values="0;-120;-240" dur="1.5s" repeatCount="indefinite"/>
+  </path>
+
+  <g opacity=".85">
+    <circle cx="207" cy="160" r="2.2" fill="#ffb08b">
+      <animate attributeName="cy" values="160;148;160" dur="1.7s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="1.7s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="323" cy="235" r="2.4" fill="#ff8a65">
+      <animate attributeName="cy" values="235;223;235" dur="1.4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="1.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="352" cy="300" r="2" fill="#ff7043">
+      <animate attributeName="cy" values="300;286;300" dur="1.9s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="1.9s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>

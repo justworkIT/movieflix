@@ -8,7 +8,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <div className="text-red-600 text-lg sm:text-2xl md:text-3xl font-extrabold tracking-wide whitespace-nowrap">
-            MovieFlix
+            <img src="/movieflix-navbar-logo.svg" alt="MovieFlix" className="h-8 w-auto" />
           </div>
 
           {/* Nav Links */}

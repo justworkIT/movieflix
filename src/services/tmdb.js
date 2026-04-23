@@ -95,7 +95,8 @@ async function fetchFromTMDB(endpoint) {
 }
 
 export async function getTrendingMovies() {
-  const data = await fetchFromTMDB('/trending/movie/day')
+//  const data = await fetchFromTMDB('/trending/movie/day')
+  const data = await fetchFromTMDB('/discover/movie?sort_by=popularity.desc&watch_region=PH&with_watch_providers=8')
   return data.results || []
 }
 
