@@ -5,12 +5,15 @@ import Loader from '../components/ui/Loader'
 import ErrorMessage from '../components/ui/ErrorMessage'
 import FilmographySection from '../components/Details/FilmographySection'
 import { POSTER_BASE_URL } from '../services/tmdb'
-import { getPersonDetails, getPersonCredits } from '../services/tmdb'
+import PersonNewsSection from '../components/Details/PersonNewsSection'
+import {
+  getPersonDetails,
+  getPersonCredits,
+} from '../services/tmdb'
 import { slugify } from '../utils/slugify'
 
 export default function PersonPage() {
   const { id, slug } = useParams()
-  console.log('Route params:', { id, slug })
   const navigate = useNavigate()
 
   const [person, setPerson] = useState(null)
@@ -18,28 +21,39 @@ export default function PersonPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+  const personName =
+    person?.name || 'Cast Member'
+
   useEffect(() => {
     async function loadPerson() {
       try {
-        const [personData, creditsData] = await Promise.all([
-          getPersonDetails(id),
-          getPersonCredits(id),
-        ])
+        const [personData, creditsData] =
+          await Promise.all([
+            getPersonDetails(id),
+            getPersonCredits(id),
+          ])
 
         setPerson(personData)
-console.log('Person API data:', personData)
-console.log('Person name:', personData.name)
-
         setCredits(creditsData)
 
-        const correctSlug = slugify(personData.name || '')
+        const correctSlug = slugify(
+          personData.name || ''
+        )
 
-        if (correctSlug && slug !== correctSlug) {
-          navigate(`/person/${id}/${correctSlug}`, { replace: true })
+        if (
+          correctSlug &&
+          slug !== correctSlug
+        ) {
+          navigate(
+            `/person/${id}/${correctSlug}`,
+            { replace: true }
+          )
         }
       } catch (err) {
         console.error(err)
-        setError('Failed to load cast details')
+        setError(
+          'Failed to load cast details'
+        )
       } finally {
         setLoading(false)
       }
@@ -50,22 +64,45 @@ console.log('Person name:', personData.name)
     loadPerson()
   }, [id, slug, navigate])
 
+  useEffect(() => {
+    document.title = `${personName} | MovieFlix`
+  }, [personName])
+
   if (loading) return <Loader />
 
   if (error || !person) {
-    return <ErrorMessage message={error || 'Failed to load cast details'} />
+    return (
+      <ErrorMessage
+        message={
+          error ||
+          'Failed to load cast details'
+        }
+      />
+    )
   }
-    const personName = person?.name || 'Cast Member'
-   console.log('Helmet title should be:', `${personName} | MovieFlix`) 
-  const knownFor = person.known_for_department || 'Acting'
-  const birthday = person.birthday || 'Unknown'
-  const birthplace = person.place_of_birth || 'Unknown'
-  const bio = person.biography || 'No biography available.'
+
+  const knownFor =
+    person.known_for_department ||
+    'Acting'
+
+  const birthday =
+    person.birthday || 'Unknown'
+
+  const birthplace =
+    person.place_of_birth ||
+    'Unknown'
+
+  const bio =
+    person.biography ||
+    'No biography available.'
 
   return (
     <main className="min-h-screen bg-[#141414] px-6 py-8 text-white md:px-12">
       <Helmet>
-       <title>{personName} | MovieFlix</title>
+        <title>
+          {personName} | MovieFlix
+        </title>
+
         <meta
           name="description"
           content={`Learn more about ${personName}, including biography, birthday, birthplace, and filmography.`}
@@ -74,7 +111,7 @@ console.log('Person name:', personData.name)
 
       <Link
         to="/"
-        className="mb-8 inline-block text-sm text-zinc-300 hover:text-white"
+        className="mb-8 inline-block text-sm text-zinc-300 transition hover:text-white"
       >
         ← Back to Home
       </Link>
@@ -84,7 +121,7 @@ console.log('Person name:', personData.name)
           {person.profile_path ? (
             <img
               src={`${POSTER_BASE_URL}${person.profile_path}`}
-              alt={person.name}
+              alt={personName}
               className="w-[260px] rounded-xl shadow-2xl"
             />
           ) : (
@@ -96,22 +133,31 @@ console.log('Person name:', personData.name)
 
         <div className="max-w-4xl">
           <h1 className="mb-4 text-4xl font-bold md:text-6xl">
-            {person.name}
+            {personName}
           </h1>
 
           <div className="mb-6 flex flex-wrap gap-3 text-sm text-zinc-300">
             <span>{knownFor}</span>
-            <span>Born: {birthday}</span>
+            <span>
+              Born: {birthday}
+            </span>
             <span>{birthplace}</span>
           </div>
 
-          <h2 className="mb-3 text-2xl font-bold">Biography</h2>
+          <h2 className="mb-3 text-2xl font-bold">
+            Biography
+          </h2>
 
-          <p className="leading-relaxed text-zinc-200">{bio}</p>
+          <p className="leading-relaxed text-zinc-200">
+            {bio}
+          </p>
         </div>
       </section>
 
-      <FilmographySection credits={credits} />
+<section className="mt-12 grid gap-10 lg:grid-cols-[1fr_2fr]">
+  <PersonNewsSection personName={personName} />
+  <FilmographySection credits={credits} />
+</section>
     </main>
   )
 }

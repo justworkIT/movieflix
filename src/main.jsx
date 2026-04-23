@@ -6,11 +6,9 @@ import App from './App'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>
+  </BrowserRouter>
 )
