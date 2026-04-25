@@ -62,23 +62,53 @@ export default function HomePage() {
     loadData()
   }, [])
 
-  const featuredMovie = trendingMovies[0]
+const heroItems = [...trendingMovies, ...trendingTVShows].slice(0, 10)
 
-  const movieRows = [
-    { title: 'In Cinema', items: nowplayingMovies, mediaType: 'movie' },
-    { title: 'Netflix Originals', items: netflixOriginalMovies, mediaType: 'movie' },
-    { title: 'Disney Plus Movies', items: disneyplusMovies, mediaType: 'movie' },
-    { title: 'HBO Max Movies', items: hbomaxMovies, mediaType: 'movie' },
-    { title: 'Popular Movies', items: popularMovies, mediaType: 'movie' },
-  ]
+const movieRows = [
+  {
+    title: 'In Cinema',
+    items: nowplayingMovies,
+    mediaType: 'movie',
+    seeMorePath: '/browse/in-cinema',
+  },
+  {
+    title: 'Netflix Originals',
+    items: netflixOriginalMovies,
+    mediaType: 'movie',
+    seeMorePath: '/browse/netflix-originals',
+  },
+  {
+    title: 'Disney Plus Movies',
+    items: disneyplusMovies,
+    mediaType: 'movie',
+    seeMorePath: '/browse/disney-plus',
+  },
+  {
+    title: 'HBO Max Movies',
+    items: hbomaxMovies,
+    mediaType: 'movie',
+    seeMorePath: '/browse/hbo-max',
+  },
+  {
+    title: 'Popular Movies',
+    items: popularMovies,
+    mediaType: 'movie',
+    seeMorePath: '/browse/popular-movies',
+  },
+]
 
-  const tvRows = [
-    { title: 'Popular TV Shows', items: popularTVShows, mediaType: 'tv' },
-  ]
+const tvRows = [
+  {
+    title: 'Popular TV Shows',
+    items: popularTVShows,
+    mediaType: 'tv',
+    seeMorePath: '/browse/popular-tv',
+  },
+]
 
   return (
     
-    <div className="min-h-screen bg-[#141414] text-white">
+    <div className="min-h-screen bg-[#0A0C12] text-white">
       <Helmet>
         <title>MovieFlix - Home</title>
         <meta
@@ -87,29 +117,33 @@ export default function HomePage() {
         />
       </Helmet>
       <Navbar />
-      <HeroBanner item={featuredMovie} />
+      
+<HeroBanner items={heroItems} />
 
-      <main className="relative z-10 -mt-16 space-y-10 px-4 pb-12 md:px-8 lg:px-12">
+      <main className="relative z-10 -mt-8 space-y-10 px-4 pb-12 md:px-8 lg:px-12">
         {loading && <Loader text="Loading content..." />}
         {error && <ErrorMessage message={error} />}
 
+<Top20Row
+  title="Top 20 Movies and TV Shows of the Week"
+  items={trendingMovies}
+  mediaType="movie"
+  seeMorePath="/browse/trending-movies"
+/>
+
         <section className="space-y-8">
-          <h3 className="text-4xl font-bold relative top-5 text-red-600">Movies</h3>
-          <Top20Row
-            title="Top 20 Movies of the Week"
-            items={trendingMovies}
-            mediaType="movie"
-          />
+          <h3 className="text-4xl font-bold relative top-5 text-red-600 mb-5">Movies</h3>
           <SectionBlock rows={movieRows} />
         </section>
 
         <section className="space-y-8">
-          <h3 className="text-4xl font-bold text-red-600">TV Shows</h3>
-          <Top20Row
-            title="Top 20 TV Shows of the Week"
-            items={trendingTVShows}
-            mediaType="tv"
-          />
+          <h3 className="text-4xl font-bold text-red-600 mb-0">TV Shows</h3>
+<Top20Row
+  title="Top 20 TV Shows of the Week"
+  items={trendingTVShows}
+  mediaType="tv"
+  seeMorePath="/browse/trending-tv"
+/>
           <SectionBlock rows={tvRows} />
         </section>
       </main>

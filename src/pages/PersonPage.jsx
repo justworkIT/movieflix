@@ -20,6 +20,7 @@ export default function PersonPage() {
   const [credits, setCredits] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [showFullBio, setShowFullBio] = useState(false)
 
   const personName =
     person?.name || 'Cast Member'
@@ -45,7 +46,7 @@ export default function PersonPage() {
           slug !== correctSlug
         ) {
           navigate(
-            `/person/${id}/${correctSlug}`,
+            `/watch/${correctSlug}-movies-and-tv-shows/${id}`,
             { replace: true }
           )
         }
@@ -95,6 +96,13 @@ export default function PersonPage() {
   const bio =
     person.biography ||
     'No biography available.'
+
+  const BIO_LIMIT = 450
+  const hasLongBio = bio.length > BIO_LIMIT
+  const displayedBio =
+    hasLongBio && !showFullBio
+      ? `${bio.slice(0, BIO_LIMIT).trim()}...`
+      : bio
 
   return (
     <main className="min-h-screen bg-[#141414] px-6 py-8 text-white md:px-12">
@@ -149,8 +157,18 @@ export default function PersonPage() {
           </h2>
 
           <p className="leading-relaxed text-zinc-200">
-            {bio}
+            {displayedBio}
           </p>
+
+          {hasLongBio ? (
+            <button
+              type="button"
+              onClick={() => setShowFullBio((current) => !current)}
+              className="mt-3 text-sm font-semibold text-red-500 transition hover:text-red-400"
+            >
+              {showFullBio ? 'Show less' : 'Show more'}
+            </button>
+          ) : null}
         </div>
       </section>
 

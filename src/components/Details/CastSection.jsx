@@ -10,8 +10,8 @@ export default function CastSection({ cast }) {
   const remainingCast = cast.length > 5 ? cast.slice(5) : []
 
   return (
-    <section className="px-6 py-10 md:px-12">
-      <div className="mb-4 flex items-center justify-between gap-4">
+    <section className="px-6 md:px-12">
+      <div className="mb-0 flex items-center justify-between gap-2">
         <h2 className="text-2xl font-bold">Cast</h2>
 
         {remainingCast.length > 0 && showAllCast ? (
@@ -24,8 +24,8 @@ export default function CastSection({ cast }) {
           </button>
         ) : null}
       </div>
-
-      <div className="flex gap-4 overflow-x-auto pb-2">
+<div className="h-px flex-1 bg-gradient-to-r from-white/80 to-30" />
+      <div className="flex flex-wrap gap-2 pb-2 mt-2">
         {visibleCast.map((person) => (
           <CastCard
             key={person.cast_id || person.credit_id || person.id}
@@ -45,7 +45,7 @@ export default function CastSection({ cast }) {
       </div>
 
       {showAllCast && remainingCast.length > 0 ? (
-        <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
+        <div className="flex flex-wrap gap-2 pb-2">
           {remainingCast.map((person) => (
             <CastCard
               key={person.cast_id || person.credit_id || person.id}

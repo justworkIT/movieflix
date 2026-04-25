@@ -1,26 +1,22 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { POSTER_BASE_URL, getYear,getGenres,getRegion } from '../../services/tmdb'
-import { getDetailsPath } from '../../utils/slugify'
-export default function MediaRow({ title, items = [], mediaType = 'movie' }) {
+import { POSTER_BASE_URL } from '../../services/tmdb'
+import RegionBadge from '../ui/RegionBadge'
+import MediaCard from '../Media/MediaCard'
+
+export default function MediaRow({ title, items, mediaType, seeMorePath }) {
   const rowRef = useRef(null)
 
   const filteredItems = items.filter((item) => item?.poster_path)
-
   if (!filteredItems.length) return null
 
   const scrollRow = (direction) => {
     if (!rowRef.current) return
-
     const container = rowRef.current
     const amount = container.clientWidth * 0.9
     const left = direction === 'left' ? -amount : amount
-
     try {
-      container.scrollBy({
-        left,
-        behavior: 'smooth',
-      })
+      container.scrollBy({ left, behavior: 'smooth' })
     } catch {
       container.scrollLeft += left
     }
@@ -28,66 +24,28 @@ export default function MediaRow({ title, items = [], mediaType = 'movie' }) {
 
   return (
     <section className="mb-8">
-      <div className="mb-3 px-0">
-        <h2 className="text-xl font-bold text-white">{title}</h2>
+      <div className="mb-1 flex items-center justify-between gap-4">
+        <h2 className="text-2xl font-bold">{title}</h2>
+        {seeMorePath ? (
+          <Link to={seeMorePath} className="text-sm font-semibold text-zinc-300 transition hover:text-white">
+            See More
+          </Link>
+        ) : null}
       </div>
+      <div className="h-px flex-1 bg-gradient-to-r from-white/80 to-30" />
 
-      <div className="relative">
-        <button
-          type="button"
-          onClick={() => scrollRow('left')}
-          className="absolute left-0 top-2 z-20 hidden h-[210px] w-[40px] items-center justify-center rounded-none bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex md:h-[240px] md:w-[43px] lg:h-[270px] lg:w-[50px]"
-          aria-label={`Scroll ${title} left`}
-        >
+      <div className="relative mt-2">
+        <button type="button" onClick={() => scrollRow('left')} className="absolute left-0 top-0 z-20 hidden h-[280px] w-[40px] items-center justify-center bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex sm:h-[230px] md:h-[260px]" aria-label={`Scroll ${title} left`}>
           ‹
         </button>
 
-        <div
-          ref={rowRef}
-          className="flex gap-3 overflow-x-auto px-6 py-2 scrollbar-hide snap-x snap-mandatory"
-          style={{ WebkitOverflowScrolling: 'touch' }}
-        >
+        <div ref={rowRef} className="flex gap-2 overflow-x-auto px-6 scrollbar-hide snap-x snap-mandatory" style={{ WebkitOverflowScrolling: 'touch' }}>
           {filteredItems.map((item) => (
-            <Link
-              key={item.id}
-              to={getDetailsPath(item, mediaType)}
-              className="group/card relative flex-none w-[140px] snap-start sm:w-[160px] md:w-[180px]"
-            >
-              <div className="overflow-hidden rounded-md">
-  {/* 🔥 REGION BADGE */}
-{getRegion(item) && (
-  <span className="absolute left-2 top-2 z-20 rounded border border-white/70 bg-red-600 px-2 py-0.5 text-[10px] font-semibold text-white shadow-md sm:text-xs">
-    {getRegion(item)}
-  </span>
-)}              
-                <img
-                  src={`${POSTER_BASE_URL}${item.poster_path}`}
-                  alt={item.title || item.name}
-                  className="h-[210px] w-full object-cover transition duration-300 group-hover/card:scale-125 sm:h-[240px] md:h-[270px]"
-                  draggable="false"
-                />
-              </div>
-
-<div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-2">
-  <p className="line-clamp-2 text-sm font-semibold text-white">
-    {item.title || item.name}
-  </p>
-
-  {/* NEW META INFO */}
-  <div className="mt-1 text-[11px] text-zinc-300">
-    {getYear(item)} • {getGenres(item).join(", ")}
-  </div>
-</div>
-            </Link>
-          ))}
+  <MediaCard key={item.id} item={item} mediaType={mediaType} />
+))}
         </div>
 
-        <button
-          type="button"
-          onClick={() => scrollRow('right')}
-          className="absolute right-0 top-2 z-20 hidden h-[210px] w-[40px] items-center justify-center rounded-none bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex md:h-[240px] md:w-[43px] lg:h-[270px] lg:w-[50px]"
-          aria-label={`Scroll ${title} right`}
-        >
+        <button type="button" onClick={() => scrollRow('right')} className="absolute right-0 top-0 z-20 hidden h-[260px] w-[40px] items-center justify-center bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex sm:h-[230px] md:h-[260px]" aria-label={`Scroll ${title} right`}>
           ›
         </button>
       </div>

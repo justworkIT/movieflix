@@ -12,7 +12,8 @@ import {
   getRecommendations,
   getCredits,
 } from '../services/tmdb'
-import { slugify } from '../utils/slugify'
+import { getCastPath, getYearPath,getGenrePath, slugify } from '../utils/slugify'
+import MediaCard from '../components/Media/MediaCard'
 
 export default function DetailsPage() {
   const { mediaType, id, slug } = useParams()
@@ -24,6 +25,9 @@ export default function DetailsPage() {
   const [cast, setCast] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [showFullOverview, setShowFullOverview] = useState(false)
+  const mediaTitle = details?.title || details?.name || 'Details'
+  const releaseYear = (details?.release_date || details?.first_air_date || '').slice(0, 4)
 
   useEffect(() => {
     async function loadDetails() {
@@ -44,11 +48,19 @@ export default function DetailsPage() {
         )
 
         setTrailer(officialTrailer || null)
+        var correctSlug = ''
+        if (mediaType === 'movie'){
+            correctSlug = slugify(detailData.titleWithYear)
+        }
+        else
+        {
+            correctSlug = slugify(detailData.name + '-' + releaseYear)
+        }
+          
 
-        const correctSlug = slugify(detailData.title || detailData.name || '')
 
         if (correctSlug && slug !== correctSlug) {
-          navigate(`/${mediaType}/${id}/${correctSlug}`, { replace: true })
+          navigate(`/watch/${correctSlug}/${mediaType}/${id}/`, { replace: true })
         }
       } catch (err) {
         console.error(err)
@@ -60,16 +72,13 @@ export default function DetailsPage() {
 
     setLoading(true)
     setError('')
+    setShowFullOverview(false)
     loadDetails()
-  }, [mediaType, id, slug, navigate])
-
-  const mediaTitle = details?.title || details?.name || 'Details'
-  const releaseYear = (details?.release_date || details?.first_air_date || '').slice(0, 4)
+  }, [mediaType, id, slug,releaseYear, navigate])
 
   const topTwoCast = cast
     .slice(0, 2)
-    .map((person) => person.name)
-    .filter(Boolean)
+    .filter((person) => person.id && person.name)
 
   const seoTitle = useMemo(() => {
     const parts = []
@@ -77,8 +86,8 @@ export default function DetailsPage() {
 
     parts.push(titleWithYear)
 
-    if (topTwoCast[0]) parts.push(topTwoCast[0])
-    if (topTwoCast[1]) parts.push(topTwoCast[1])
+    if (topTwoCast[0]) parts.push(topTwoCast[0].name)
+    if (topTwoCast[1]) parts.push(topTwoCast[1].name)
 
     parts.push('MovieFlix')
 
@@ -86,6 +95,7 @@ export default function DetailsPage() {
   }, [mediaTitle, releaseYear, topTwoCast])
 
   const seoDescription = details?.overview || `Watch ${mediaTitle} on MovieFlix.`
+  const overviewText = details?.overview || 'No overview available.'
 
   if (loading) return <Loader />
 
@@ -145,28 +155,19 @@ export default function DetailsPage() {
                     {details.runtime ? <span>{details.runtime} min</span> : null}
                   </div>
 
-                  {topTwoCast.length > 0 ? (
-                    <p className="mb-4 text-sm text-zinc-300">
-                      Starring: {topTwoCast.join(', ')}
-                    </p>
-                  ) : null}
+                  <CastNames cast={topTwoCast} />
 
-                  <p className="mb-6 max-w-2xl text-zinc-200">
-                    {details.overview || 'No overview available.'}
-                  </p>
+                  <ExpandableOverview
+                    text={overviewText}
+                    expanded={showFullOverview}
+                    onToggle={() => setShowFullOverview((current) => !current)}
+                  />
 
-                  {details.genres?.length ? (
-                    <div className="flex flex-wrap gap-2">
-                      {details.genres.map((genre) => (
-                        <span
-                          key={genre.id}
-                          className="rounded bg-white/10 px-3 py-1 text-sm text-zinc-200"
-                        >
-                          {genre.name}
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
+                  <DetailPills
+                    releaseYear={releaseYear}
+                    genres={details.genres}
+                    mediaType={mediaType}
+                  />
                 </div>
               </div>
 
@@ -207,28 +208,17 @@ export default function DetailsPage() {
                   {details.runtime ? <span>{details.runtime} min</span> : null}
                 </div>
 
-                {topTwoCast.length > 0 ? (
-                  <p className="mb-4 text-sm text-zinc-300">
-                    Starring: {topTwoCast.join(', ')}
-                  </p>
-                ) : null}
+                <CastNames cast={topTwoCast} />
 
                 <p className="mb-6 max-w-2xl text-zinc-200">
                   {details.overview || 'No overview available.'}
                 </p>
 
-                {details.genres?.length ? (
-                  <div className="flex flex-wrap gap-2">
-                    {details.genres.map((genre) => (
-                      <span
-                        key={genre.id}
-                        className="rounded bg-white/10 px-3 py-1 text-sm text-zinc-200"
-                      >
-                        {genre.name}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
+                <DetailPills
+                  releaseYear={releaseYear}
+                  genres={details.genres}
+                  mediaType={mediaType}
+                />
               </div>
             </div>
           )}
@@ -237,10 +227,83 @@ export default function DetailsPage() {
 
       <CastSection cast={cast} />
 
-      <section className="px-6 py-10 md:px-12">
-        <h2 className="mb-4 text-2xl font-bold">More Like This</h2>
+      <section className="px-6 py-8 md:px-12">
+        <h2 className="text-2xl font-bold">More Like This</h2>
         <MediaRow title="" items={recommendations} mediaType={mediaType} />
       </section>
+    </div>
+  )
+}
+
+
+function ExpandableOverview({ text, expanded, onToggle }) {
+  const OVERVIEW_LIMIT = 320
+  const shouldTruncate = text.length > OVERVIEW_LIMIT
+  const displayText = shouldTruncate && !expanded
+    ? `${text.slice(0, OVERVIEW_LIMIT).trim()}...`
+    : text
+
+  return (
+    <div className="mb-6 max-w-2xl">
+      <p className="text-zinc-200">{displayText}</p>
+
+      {shouldTruncate ? (
+        <button
+          type="button"
+          onClick={onToggle}
+          className="mt-2 text-sm font-semibold text-red-500 transition hover:text-red-400"
+        >
+          {expanded ? 'Show less' : 'Show more'}
+        </button>
+      ) : null}
+    </div>
+  )
+}
+
+function CastNames({ cast }) {
+  if (!cast.length) return null
+
+  return (
+    <p className="mb-4 text-sm text-zinc-300">
+      Starring:{' '}
+      {cast.map((person, index) => (
+        <span key={person.id}>
+          <Link
+            to={getCastPath(person)}
+            className="text-zinc-200 transition hover:text-white hover:underline"
+          >
+            {person.name}
+          </Link>
+          {index < cast.length - 1 ? ', ' : ''}
+        </span>
+      ))}
+    </p>
+  )
+}
+
+function DetailPills({ releaseYear, genres }) {
+  if (!releaseYear && !genres?.length) return null
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {releaseYear ? (
+        <Link
+          to={getYearPath(releaseYear)}
+          className="rounded bg-white/10 px-3 py-1 text-sm text-zinc-200 transition hover:bg-white/20 hover:text-white"
+        >
+          {releaseYear}
+        </Link>
+      ) : null}
+
+      {genres?.map((genre) => (
+        <Link
+          key={genre.id}
+          to={getGenrePath(genre.id, genre.name)}
+          className="rounded bg-white/10 px-3 py-1 text-sm text-zinc-200 transition hover:bg-white/20 hover:text-white"
+        >
+          {genre.name}
+        </Link>
+      ))}
     </div>
   )
 }

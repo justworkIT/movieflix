@@ -1,7 +1,9 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { POSTER_BASE_URL, getYear, getGenres, getRegion } from '../../services/tmdb'
+import { POSTER_BASE_URL } from '../../services/tmdb'
 import { getDetailsPath } from '../../utils/slugify'
+import { getMediaMeta } from '../../utils/mediaMeta'
+import RegionBadge from '../ui/RegionBadge'
 export default function Top20Row({ title, items = [], mediaType = 'movie' }) {
   const rowRef = useRef(null)
 
@@ -27,16 +29,16 @@ export default function Top20Row({ title, items = [], mediaType = 'movie' }) {
   }
 
   return (
-    <section className="mb-8">
-      <div className="mb-3 px-0">
+    <section className="mb-2">
+      <div className="mb-0 px-0">
         <h2 className="text-xl font-bold text-white">{title}</h2>
       </div>
-
-      <div className="relative">
+<div className="h-px flex-1 bg-gradient-to-r from-white/80 to-30" />
+      <div className="relative mt-2">
         <button
           type="button"
           onClick={() => scrollRow('left')}
-          className="absolute left-0 top-2 z-20 hidden h-[210px] w-[40px] items-center justify-center rounded-none bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex md:h-[240px] md:w-[43px] lg:h-[270px] lg:w-[50px]"
+          className="absolute left-0 top-0 z-20 hidden h-[260px] w-[40px] items-center justify-center rounded-none bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex sm:h-[230px] md:h-[260px]"
           aria-label={`Scroll ${title} left`}
         >
           ‹
@@ -44,43 +46,38 @@ export default function Top20Row({ title, items = [], mediaType = 'movie' }) {
 
         <div
           ref={rowRef}
-          className="flex gap-3 overflow-x-auto px-6 py-2 scrollbar-hide snap-x snap-mandatory"
+          className="flex gap-2 overflow-x-auto px-6 scrollbar-hide snap-x snap-mandatory"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
 {filteredItems.map((item, index) => (
   <Link
     key={item.id}
     to={getDetailsPath(item, mediaType)}
-    className="group/card flex-none snap-start w-[140px] sm:w-[160px] md:w-[180px]"
+    className="group/card flex-none snap-start w-[180px]"
   >
-    <div className="relative overflow-hidden rounded-md">
-{getRegion(item) && (
-  <span className="absolute left-2 top-2 z-20 rounded border border-white/70 bg-red-600 px-2 py-0.5 text-[10px] font-semibold text-white shadow-md sm:text-xs">
-    {getRegion(item)}
-  </span>
-)}      
+    
+    <div className="overflow-hidden rounded-2xl border border-white/5 bg-[#141823] shadow-md transition duration-300 group-hover/card:shadow-xl">
+    
+    <div className="relative overflow-hidden rounded-t-2xl">
+      <span className="top10-number absolute right-0 top-0 z-20 text-[48px] font-black leading-none">
+  {index + 1}
+</span>
+      <RegionBadge item={item} />
       <img
         src={`${POSTER_BASE_URL}${item.poster_path}`}
         alt={item.title || item.name}
-        className="h-[210px] w-full object-cover transition duration-300 group-hover/card:scale-125 sm:h-[240px] md:h-[270px]"
+        className="h-[200px] w-full object-fill transition duration-300 group-hover/card:scale-125 sm:h-[170px] md:h-[200px]"
         draggable="false"
       />
-
-      {/* 🔥 TOP RIGHT NUMBER */}
-<span className="top10-number absolute right-0 top-0 z-20 text-[48px] font-black leading-none sm:text-[60px] md:text-[70px]">
-  {index + 1}
-</span>
+    </div>
 
       {/* Gradient + Title */}
-<div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-2">
-  <p className="line-clamp-2 text-sm font-semibold text-white">
-    {item.title || item.name}
-  </p>
-
-  <div className="mt-1 text-[11px] text-zinc-300">
-    {getYear(item)} • {getGenres(item).join(", ")}
-  </div>
-</div>
+                <div className="p-2">
+                  <p className="truncate text-sm font-semibold text-white">
+                    {item.title || item.name}
+                  </p>
+                  <p className="mt-1 text-[11px] text-zinc-400 line-clamp-1">{getMediaMeta(item)}</p>
+                </div>
     </div>
   </Link>
 ))}
@@ -89,7 +86,7 @@ export default function Top20Row({ title, items = [], mediaType = 'movie' }) {
         <button
           type="button"
           onClick={() => scrollRow('right')}
-          className="absolute right-0 top-2 z-20 hidden h-[210px] w-[40px] items-center justify-center rounded-none bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex md:h-[240px] md:w-[43px] lg:h-[270px] lg:w-[50px]"
+          className="absolute right-0 top-0 z-20 hidden h-[260px] w-[40px] items-center justify-center rounded-none bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex sm:h-[230px] md:h-[260px]"
           aria-label={`Scroll ${title} right`}
         >
           ›
