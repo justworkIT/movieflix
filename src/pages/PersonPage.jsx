@@ -105,7 +105,7 @@ export default function PersonPage() {
       : bio
 
   return (
-    <main className="min-h-screen bg-[#141414] px-6 py-8 text-white md:px-12">
+    <main className="min-h-screen bg-[#0A0C12] px-6 py-8 text-white md:px-12">
       <Helmet>
         <title>
           {personName} | MovieFlix

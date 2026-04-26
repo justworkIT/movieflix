@@ -104,14 +104,14 @@ export default function DetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#141414] text-white">
+    <div className="min-h-screen bg-[#0A0C12] text-white">
       <Helmet>
         <title>{seoTitle}</title>
         <meta name="description" content={seoDescription} />
       </Helmet>
 
       <section
-        className="relative min-h-[70vh] bg-cover bg-center"
+        className="relative h-[50vh] min-h-[50vh] bg-cover bg-center"
         style={{
           backgroundImage: details.backdrop_path
             ? `url(${BACKDROP_BASE_URL}${details.backdrop_path})`
@@ -171,10 +171,10 @@ export default function DetailsPage() {
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-lg shadow-xl">
-                <div className="aspect-video">
+              <div className="overflow-hidden rounded-lg shadow-xl h-[380px] relative top-0">
+                <div className="relative w-full overflow-hidden rounded-2xl aspect-video">
                   <iframe
-                    className="h-full w-full"
+                    className="absolute inset-0 h-full w-full"
                     src={`https://www.youtube.com/embed/${trailer.key}`}
                     title="Trailer"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

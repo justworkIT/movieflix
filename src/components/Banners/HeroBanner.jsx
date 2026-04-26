@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { getMediaMeta } from "../../utils/MediaMeta"
+import { getMediaMeta } from "../../utils/mediaMeta"
 import { getDetailsPath } from "../../utils/slugify"
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
 

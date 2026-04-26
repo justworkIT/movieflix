@@ -118,14 +118,14 @@ export default function BrowsePage() {
 
   if (!config) {
     return (
-      <main className="min-h-screen bg-[#141414] px-6 pt-28 text-white md:px-12">
+      <main className="min-h-screen bg-[#0A0C12] px-6 pt-28 text-white md:px-12">
         Category not found.
       </main>
     )
   }
 
   return (
-    <main className="min-h-screen bg-[#141414] px-6 pt-28 pb-12 text-white md:px-12">
+    <main className="min-h-screen bg-[#0A0C12] px-6 pt-28 pb-12 text-white md:px-12">
       <Helmet>
         <title>{config.title} | MovieFlix</title>
       </Helmet>
