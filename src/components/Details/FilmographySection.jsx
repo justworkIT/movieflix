@@ -20,8 +20,8 @@ export default function FilmographySection({ credits }) {
     .sort(sortByNewest)
 
   return (
-    <section className="mt-2">
-      <h2 className="mb-2 text-3xl font-bold">
+    <section className="py-6">
+      <h2 className="mb-2 text-2xl font-bold">
         Filmography
       </h2>
 
