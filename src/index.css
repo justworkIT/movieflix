@@ -1,9 +1,14 @@
 @import "tailwindcss";
 
+body {
+  background: #0A0C12;
+}
+
 /* Hide scrollbar for Chrome, Safari, Opera */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
 
 /* Hide scrollbar for IE, Edge, Firefox */
 .scrollbar-hide {
