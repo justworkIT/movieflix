@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import { getYearPath, getGenrePath, getRegionPath } from '../../utils/slugify'
 import { MOVIE_GENRES, TV_GENRES } from '../../services/tmdb'
-import { getGenrePath, getYearPath } from '../../utils/slugify'
-
 const YEARS = Array.from({ length: 30 }, (_, index) => String(new Date().getFullYear() - index))
 
 function getUnifiedGenres() {
@@ -16,9 +15,24 @@ function getUnifiedGenres() {
   )
 }
 
+const REGIONS = [
+  'K-Drama',
+  'C-Drama',
+  'J-Drama',
+  'Thai Drama',
+  'Pinoy',
+  'Anime',
+  'Bollywood',
+  'Turkish Series',
+  'Spanish Series',
+  'Latin American',
+  'European',
+]
+
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const unifiedGenres = getUnifiedGenres()
+const regions = REGIONS
 
   const baseLink = 'transition hover:text-gray-300'
   const activeLink = 'text-white font-semibold'
@@ -72,11 +86,11 @@ export default function Navbar() {
                 Home
               </NavLink>
 
-              <NavLink to="/movies" className={navClass}>
+              <NavLink to="/watch/movies" className={navClass}>
                 Movies
               </NavLink>
 
-              <NavLink to="/tv" className={navClass}>
+              <NavLink to="/watch/tv" className={navClass}>
                 TV Shows
               </NavLink>
 
@@ -116,8 +130,8 @@ export default function Navbar() {
             aria-label="Close browse menu"
           />
 
-          <aside className="relative flex h-full w-fit min-w-[260px] max-w-[calc(100vw-2rem)] flex-col bg-[#141414] px-5 py-5 text-white shadow-2xl sm:min-w-[280px] sm:px-6">
-            <div className="mb-5 flex shrink-0 items-center justify-between border-b border-white/10 pb-4">
+          <aside className="relative flex h-full w-fit min-w-[260px] max-w-[calc(100vw-2rem)] flex-col bg-[#141414] px-3 py-5 text-white shadow-2xl sm:min-w-[280px] sm:px-3">
+            <div className="mb-2 flex shrink-0 items-center justify-between border-b border-white/10 pb-2">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-red-500">
                   Browse
@@ -134,26 +148,25 @@ export default function Navbar() {
                 ✕
               </button>
             </div>
+<div className="flex min-h-0 flex-1 flex-col gap-1 overflow-hidden">
+  <MenuSection title="Year" height="h-[65px]">
+    <div className="grid grid-cols-4 gap-1">
+      {YEARS.map((year) => (
+        <Link
+          key={year}
+          to={getYearPath(year)}
+          onClick={closeMenu}
+          className="rounded-md bg-white/5 px-2 py-1.5 text-center text-[11px] text-zinc-300 transition hover:bg-red-600 hover:text-white"
+        >
+          {year}
+        </Link>
+      ))}
+    </div>
+  </MenuSection>
 
-            <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-hidden">
-              <MenuSection title="Year">
-                <div className="grid grid-cols-3 gap-2">
-                  {YEARS.map((year) => (
-                    <Link
-                      key={year}
-                      to={getYearPath(`${year}`)}
-                      onClick={closeMenu}
-                      className="rounded-lg bg-white/5 px-3 py-2 text-center text-sm text-zinc-300 transition hover:bg-red-600 hover:text-white"
-                    >
-                      {year}
-                    </Link>
-                  ))}
-                </div>
-              </MenuSection>
-
-              <MenuSection title="Genre">
-                <div className="grid grid-cols-1 gap-2">
-                  {unifiedGenres.map(([id, name]) => (
+  <MenuSection title="Genre" height="h-[325px]">
+    <div className="grid grid-cols-2 gap-1">
+      {unifiedGenres.map(([id, name]) => (
                     <Link
                       key={`${id}-${name}`}
                       to={getGenrePath(`${id}`,`${name}`)}
@@ -163,9 +176,25 @@ export default function Navbar() {
                       {name}
                     </Link>
                   ))}
-                </div>
-              </MenuSection>
-            </div>
+    </div>
+  </MenuSection>
+
+  <MenuSection title="Region" height="h-[195px]">
+    <div className="grid grid-cols-2 gap-1">
+      {regions.map((region) => (
+        <Link
+          key={region}
+          to={getRegionPath('cn|zh', 'cdrama')}
+          onClick={closeMenu}
+          className="rounded-md bg-white/5 px-2 py-1.5 text-center text-[11px] text-zinc-300 transition hover:bg-red-600 hover:text-white"
+        >
+          {region}
+        </Link>
+      ))}
+    </div>
+  </MenuSection>
+</div>
+
           </aside>
         </div>
       ) : null}
@@ -173,17 +202,24 @@ export default function Navbar() {
   )
 }
 
-function MenuSection({ title, children }) {
+function MenuSection({ title, children, height = 'h-[260px]' }) {
   return (
-    <section className="flex min-h-0 flex-1 flex-col rounded-2xl border border-white/10 bg-black/20 p-4">
-      <div className="mb-3 flex shrink-0 items-center gap-4">
+    <section className="rounded-2xl border border-white/10 bg-black/20 p-2">
+      <div className="mb-3 flex items-center gap-4">
         <h3 className="shrink-0 text-lg font-bold">{title}</h3>
         <div className="h-px flex-1 bg-gradient-to-r from-white/30 to-transparent" />
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {children}
-      </div>
+<div
+  className={`${height} overflow-y-auto pr-1 overscroll-contain scrollbar-hide`}
+  style={{
+    WebkitOverflowScrolling: 'touch',
+    scrollbarWidth: 'none',
+    msOverflowStyle: 'none',
+  }}
+>
+  {children}
+</div>
     </section>
   )
 }

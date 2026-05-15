@@ -42,9 +42,9 @@ export default function SearchPage() {
 
   const year = queryYear || routeYear
   const genre = queryGenre || genreId || ''
-const genreName = genre
+  const genreName = genre
     ? MOVIE_GENRES[genre] || TV_GENRES[genre] || 'Genre'
-  : ''
+    : ''
 
   const pageTitle = year
     ? `${year} Movies & TV Shows`
@@ -117,7 +117,7 @@ if (genre) {
   const [movies, tvShows] = await Promise.all([
     discoverByGenre('movie', genre, 1),
     discoverByGenre('tv', genre, 1),
-    ])
+  ])
 
   setMovieResults(movies)
   setTvResults(tvShows)
