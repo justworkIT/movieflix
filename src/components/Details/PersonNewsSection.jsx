@@ -45,7 +45,7 @@ export default function PersonNewsSection({ personName }) {
   }, [personName])
 
   return (
-    <section>
+    <section className='px-6 py-6'>
       <h2 className="mb-6 text-2xl font-bold">Latest News</h2>
 
       {loading && articles.length === 0 ? (
