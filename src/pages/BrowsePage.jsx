@@ -1,10 +1,9 @@
 import { Helmet } from 'react-helmet-async'
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import RegionBadge from '../components/ui/RegionBadge'
+import { useParams } from 'react-router-dom'
+import MediaCard from '../components/Media/MediaCard'
 
 import {
-  POSTER_BASE_URL,
   getTrendingMovies,
   getTrendingTVShows,
   getPopularMovies,
@@ -14,8 +13,6 @@ import {
   getDisneyPlusMovies,
   gethbomaxMovies,
 } from '../services/tmdb'
-import { getDetailsPath } from '../utils/slugify'
-import { getMediaMeta } from '../utils/mediaMeta'
 
 const BROWSE_CONFIG = {
   'trending-movies': {
@@ -136,43 +133,14 @@ export default function BrowsePage() {
         <p className="text-sm text-zinc-400">Loading...</p>
       ) : (
         <>
-          <div className="flex flex-wrap gap-3">
-            {items.map((item) => {
-              const title = item.title || item.name || 'Untitled'
-              const imagePath = item.poster_path
-
-              return (
-                <Link
-                  key={`${item.media_type}-${item.id}`}
-                  to={getDetailsPath(item, item.media_type)}
-                  className="group/card relative w-[150px] flex-shrink-0 cursor-pointer overflow-hidden rounded-md bg-zinc-900 shadow-lg transition duration-300 hover:z-10 hover:scale-105 hover:shadow-2xl sm:w-[160px] md:w-[170px]"
-                >
-                    <RegionBadge item={item} />
-                  <div className="aspect-[2/3] w-full overflow-hidden rounded-md bg-zinc-800">
-                    {imagePath ? (
-                      <img
-                        src={`${POSTER_BASE_URL}${imagePath}`}
-                        alt={title}
-                        className="h-full w-full object-cover transition duration-300 group-hover/card:scale-110"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center px-3 text-center text-sm text-zinc-400">
-                        No image
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-3">
-                    <p className="line-clamp-2 text-sm font-semibold text-white">
-                      {title}
-                    </p>
-                    <p className="mt-1 text-[11px] text-zinc-300">
-                      {getMediaMeta(item)}
-                    </p>
-                  </div>
-                </Link>
-              )
-            })}
+          <div className="flex flex-wrap gap-3 sm:gap-4">
+            {items.map((item) => (
+              <MediaCard
+                key={`${item.media_type}-${item.id}`}
+                item={item}
+                mediaType={item.media_type}
+              />
+            ))}
           </div>
 
           <div className="mt-10 flex justify-center">
