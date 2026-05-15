@@ -44,6 +44,11 @@ export function getGenrePath(id,name) {
   return `/watch/${slugify(name)}-movies-and-tv-shows/genre/${id}`
 }
 
+export function getRegionPath(id,name) {
+  return `/watch/${slugify(name)}-movies-and-tv-shows/region/${id}`
+}
+
+
 export function getYearPath(year) {
   return `/watch/${slugify(year)}-movies-and-tv-shows/`
 }

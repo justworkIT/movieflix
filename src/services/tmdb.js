@@ -23,7 +23,6 @@ export const MOVIE_GENRES = {
   9648: 'Mystery',
   10749: 'Romance',
   878: 'Science Fiction',
-  10770: 'TV Movie',
   53: 'Thriller',
   10752: 'War',
   37: 'Western',
@@ -49,6 +48,15 @@ export const TV_GENRES = {
 }
 
 export const regionMap = {
+  /*
+CA  Canada 2 (en+fr)
+CN  China 2 (cn+zh)
+IN  India 5 (hi+kn+ml+ta+te)
+NO  Norway 2 (nb+no)
+ES  Spain 4 (ca+es+eu+gl)
+Filters support being comma (,) or pipe (|) separated.
+Comma's are treated like an AND and query while pipe's are an OR.
+  */
   ar: 'SA',
   bg: 'BG',
   bn: 'BD',
@@ -177,14 +185,13 @@ export async function getPopularTVShows(
 }
 
 export async function getNowPlayingMovies(
-  region = 'PH',
-  page = 1
+  page = 1,
+  region = 'PH'
 ) {
   const data =
     await fetchFromTMDB(
       `/movie/now_playing?region=${region}&page=${page}`
     )
-
   return data.results || []
 }
 
@@ -398,3 +405,4 @@ export async function discoverByGenre(type, genreId, page = 1) {
     media_type: mediaType,
   }))
 }
+
