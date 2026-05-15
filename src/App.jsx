@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Layout/Navbar'
-import Footer from './components/Layout/Footer'
 import HomePage from './pages/HomePage'
 import DetailsPage from './pages/DetailsPage'
 import PersonPage from './pages/PersonPage'
@@ -31,7 +30,6 @@ export default function App() {
         <Route path="/watch/:slug/:mediaType/:id" element={<DetailsPage />} />
   
       </Routes>
-<Footer />
     </>
   )
 }

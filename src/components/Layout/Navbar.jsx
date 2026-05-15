@@ -130,7 +130,7 @@ const regions = REGIONS
             aria-label="Close browse menu"
           />
 
-          <aside className="relative flex h-full w-fit min-w-[260px] max-w-[calc(100vw-2rem)] flex-col bg-[#141414] px-3 py-5 text-white shadow-2xl sm:min-w-[280px] sm:px-3">
+          <aside className="relative flex h-full w-fit min-w-[260px] max-w-[300px] flex-col bg-[#141414] px-3 py-5 text-white shadow-2xl sm:min-w-[280px] sm:px-3">
             <div className="mb-2 flex shrink-0 items-center justify-between border-b border-white/10 pb-2">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-red-500">
@@ -150,7 +150,7 @@ const regions = REGIONS
             </div>
 <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-hidden">
   <MenuSection title="Year" height="h-[65px]">
-    <div className="grid grid-cols-4 gap-1">
+    <div className="grid grid-cols-6 gap-1">
       {YEARS.map((year) => (
         <Link
           key={year}
@@ -164,14 +164,14 @@ const regions = REGIONS
     </div>
   </MenuSection>
 
-  <MenuSection title="Genre" height="h-[325px]">
-    <div className="grid grid-cols-2 gap-1">
+  <MenuSection title="Genre" height="h-[260px]">
+    <div className="flex flex-wrap gap-1">
       {unifiedGenres.map(([id, name]) => (
                     <Link
                       key={`${id}-${name}`}
                       to={getGenrePath(`${id}`,`${name}`)}
                       onClick={closeMenu}
-                      className="whitespace-nowrap rounded-lg bg-white/5 px-3 py-2 text-sm text-zinc-300 transition hover:bg-red-600 hover:text-white"
+                      className="whitespace-nowrap rounded-lg bg-white/5 px-2 py-1.5 text-[11px] text-zinc-300 transition hover:bg-red-600 hover:text-white"
                     >
                       {name}
                     </Link>
@@ -180,7 +180,7 @@ const regions = REGIONS
   </MenuSection>
 
   <MenuSection title="Region" height="h-[195px]">
-    <div className="grid grid-cols-2 gap-1">
+    <div className="flex flex-wrap gap-1">
       {regions.map((region) => (
         <Link
           key={region}
@@ -195,6 +195,14 @@ const regions = REGIONS
   </MenuSection>
 </div>
 
+            <div className="mt-auto border-t border-white/10 pt-4">
+              <footer className="text-center text-xs text-zinc-400">
+                <p>© 2026 MovieFlix.</p>
+                <p className="mt-1 text-[10px] text-zinc-500">
+                  Built with React + TMDB API
+                </p>
+              </footer>
+            </div>
           </aside>
         </div>
       ) : null}
