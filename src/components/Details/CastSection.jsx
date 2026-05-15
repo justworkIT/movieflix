@@ -1,31 +1,24 @@
 import { useState } from 'react'
 import CastCard from './CastCard'
 
-export default function CastSection({ cast }) {
+export default function CastSection({ cast = [] }) {
   const [showAllCast, setShowAllCast] = useState(false)
 
   if (!cast.length) return null
 
-  const visibleCast = cast.length > 5 ? cast.slice(0, 5) : cast.slice(0, 6)
-  const remainingCast = cast.length > 5 ? cast.slice(5) : []
+  const hasMoreCast = cast.length > 5
+  const visibleCast = showAllCast || !hasMoreCast ? cast : cast.slice(0, 5)
 
   return (
-    <section className="px-6 md:px-12">
-      <div className="mb-0 flex items-center justify-between gap-2">
-        <h2 className="text-2xl font-bold">Cast</h2>
-
-        {remainingCast.length > 0 && showAllCast ? (
-          <button
-            type="button"
-            onClick={() => setShowAllCast(false)}
-            className="text-sm text-zinc-300 transition hover:text-white"
-          >
-            Show less
-          </button>
-        ) : null}
+    <section className="px-6 sm:px-6 md:px-12">
+      <div className="mb-2 flex items-center gap-3">
+        <h2 className="shrink-0 text-xl font-bold text-white sm:text-2xl">
+          Cast
+        </h2>
+        <div className="h-px flex-1 bg-gradient-to-r from-white/80 to-transparent" />
       </div>
-<div className="h-px flex-1 bg-gradient-to-r from-white/80 to-30" />
-      <div className="flex flex-wrap gap-2 pb-2 mt-2">
+
+      <div className="flex flex-wrap gap-2 pb-2 sm:gap-3">
         {visibleCast.map((person) => (
           <CastCard
             key={person.cast_id || person.credit_id || person.id}
@@ -33,27 +26,16 @@ export default function CastSection({ cast }) {
           />
         ))}
 
-        {remainingCast.length > 0 ? (
+        {hasMoreCast ? (
           <button
             type="button"
             onClick={() => setShowAllCast((prev) => !prev)}
-            className="h-[205px] w-[180px] flex-shrink-0 rounded-xl border border-dashed border-white/20 bg-transparent px-4 text-lg font-semibold text-zinc-300 transition hover:border-white/40 hover:text-white"
+            className="flex h-[185px] w-[105px] flex-none items-center justify-center rounded-xl border border-dashed border-white/20 bg-white/[0.03] px-3 text-sm font-semibold text-zinc-300 transition hover:border-white/40 hover:bg-white/[0.06] hover:text-white sm:h-[215px] sm:w-[125px] sm:rounded-2xl md:h-[252px] md:w-[150px] lg:h-[277px] lg:w-[170px] xl:h-[287px] xl:w-[180px]"
           >
-            More
+            {showAllCast ? 'Show less' : 'More'}
           </button>
         ) : null}
       </div>
-
-      {showAllCast && remainingCast.length > 0 ? (
-        <div className="flex flex-wrap gap-2 pb-2">
-          {remainingCast.map((person) => (
-            <CastCard
-              key={person.cast_id || person.credit_id || person.id}
-              person={person}
-            />
-          ))}
-        </div>
-      ) : null}
     </section>
   )
 }
