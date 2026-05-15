@@ -12,8 +12,7 @@ import {
   getRecommendations,
   getCredits,
 } from '../services/tmdb'
-import { getCastPath, getYearPath,getGenrePath, slugify } from '../utils/slugify'
-import MediaCard from '../components/Media/MediaCard'
+import { getCastPath, getYearPath, getGenrePath, slugify } from '../utils/slugify'
 
 export default function DetailsPage() {
   const { mediaType, id, slug } = useParams()
@@ -74,7 +73,7 @@ export default function DetailsPage() {
     setError('')
     setShowFullOverview(false)
     loadDetails()
-  }, [mediaType, id, slug,releaseYear, navigate])
+  }, [mediaType, id, slug, navigate])
 
   const topTwoCast = cast
     .slice(0, 2)
@@ -111,123 +110,82 @@ export default function DetailsPage() {
       </Helmet>
 
       <section
-        className="relative h-[50vh] min-h-[50vh] bg-cover bg-center"
+        className="relative top-10 isolate min-h-[36vh] overflow-hidden bg-cover bg-center"
         style={{
           backgroundImage: details.backdrop_path
             ? `url(${BACKDROP_BASE_URL}${details.backdrop_path})`
             : 'none',
         }}
       >
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#141414] via-black/70 to-black/40" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#141414] via-black/50 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-[#0A0C12] via-black/75 to-black/40" />
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-[#0A0C12] via-black/55 to-transparent" />
 
-        <div className="relative z-10 px-6 py-8 md:px-12">
-          <Link
-            to="/"
-            className="mb-8 inline-block text-sm text-zinc-300 hover:text-white"
-          >
-            ← Back to Home
-          </Link>
+        <div className="relative z-10 px-6 py-8 md:px-12 md:py-12">
+          <div className="flex flex-col gap-8 md:flex-row md:items-start">
+            {details.poster_path && (
+              <img
+                src={`${POSTER_BASE_URL}${details.poster_path}`}
+                alt={mediaTitle}
+                className="w-[160px] flex-none rounded-xl shadow-xl sm:w-[190px] md:w-[220px]"
+              />
+            )}
 
-          {trailer ? (
-            <div className="grid gap-8 md:grid-cols-[1.3fr_1.7fr]">
-              <div className="flex flex-col gap-6 md:flex-row">
-                {details.poster_path && (
-                  <img
-                    src={`${POSTER_BASE_URL}${details.poster_path}`}
-                    alt={mediaTitle}
-                    className="h-[300px] w-[220px] rounded shadow-xl"
-                  />
-                )}
+            <div className="min-w-0 max-w-3xl flex-1">
+              <h1 className="mb-4 text-4xl font-bold md:text-6xl">
+                {mediaTitle}
+              </h1>
 
-                <div className="max-w-2xl">
-                  <h1 className="mb-4 text-4xl font-bold md:text-6xl">
-                    {mediaTitle}
-                  </h1>
+              <div className="mb-4 flex flex-wrap gap-4 text-sm text-zinc-300">
+                <span>{details.release_date || details.first_air_date}</span>
 
-                  <div className="mb-4 flex flex-wrap gap-4 text-sm text-zinc-300">
-                    <span>{details.release_date || details.first_air_date}</span>
+                {details.vote_average ? (
+                  <span>Rating: {details.vote_average.toFixed(1)}</span>
+                ) : null}
 
-                    {details.vote_average ? (
-                      <span>Rating: {details.vote_average.toFixed(1)}</span>
-                    ) : null}
-
-                    {details.runtime ? <span>{details.runtime} min</span> : null}
-                  </div>
-
-                  <CastNames cast={topTwoCast} />
-
-                  <ExpandableOverview
-                    text={overviewText}
-                    expanded={showFullOverview}
-                    onToggle={() => setShowFullOverview((current) => !current)}
-                  />
-
-                  <DetailPills
-                    releaseYear={releaseYear}
-                    genres={details.genres}
-                    mediaType={mediaType}
-                  />
-                </div>
+                {details.runtime ? <span>{details.runtime} min</span> : null}
               </div>
 
-              <div className="overflow-hidden rounded-lg shadow-xl h-[380px] relative top-0">
-                <div className="relative w-full overflow-hidden rounded-2xl aspect-video">
-                  <iframe
-                    className="absolute inset-0 h-full w-full"
-                    src={`https://www.youtube.com/embed/${trailer.key}`}
-                    title="Trailer"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-              </div>
+              <CastNames cast={topTwoCast} />
+
+              <ExpandableOverview
+                text={overviewText}
+                expanded={showFullOverview}
+                onToggle={() => setShowFullOverview((current) => !current)}
+              />
+
+              <DetailPills
+                releaseYear={releaseYear}
+                genres={details.genres}
+                mediaType={mediaType}
+              />
             </div>
-          ) : (
-            <div className="mt-12 flex flex-col gap-8 md:flex-row md:items-end">
-              {details.poster_path && (
-                <img
-                  src={`${POSTER_BASE_URL}${details.poster_path}`}
-                  alt={mediaTitle}
-                  className="w-[220px] rounded shadow-xl"
-                />
-              )}
-
-              <div className="max-w-3xl">
-                <h1 className="mb-4 text-4xl font-bold md:text-6xl">
-                  {mediaTitle}
-                </h1>
-
-                <div className="mb-4 flex flex-wrap gap-4 text-sm text-zinc-300">
-                  <span>{details.release_date || details.first_air_date}</span>
-
-                  {details.vote_average ? (
-                    <span>Rating: {details.vote_average.toFixed(1)}</span>
-                  ) : null}
-
-                  {details.runtime ? <span>{details.runtime} min</span> : null}
-                </div>
-
-                <CastNames cast={topTwoCast} />
-
-                <p className="mb-6 max-w-2xl text-zinc-200">
-                  {details.overview || 'No overview available.'}
-                </p>
-
-                <DetailPills
-                  releaseYear={releaseYear}
-                  genres={details.genres}
-                  mediaType={mediaType}
-                />
-              </div>
-            </div>
-          )}
+          </div>
         </div>
       </section>
 
-      <CastSection cast={cast} />
+      {trailer ? (
+        <section className="px-6 py-8 md:px-12">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-2xl font-bold">Official Trailer</h2>
+          </div>
 
-      <section className="px-6 py-8 md:px-12">
+          <div className="overflow-hidden rounded-2xl bg-black shadow-2xl">
+            <div className="relative aspect-video w-full">
+              <iframe
+                className="absolute inset-0 h-full w-full"
+                src={`https://www.youtube.com/embed/${trailer.key}`}
+                title={`${mediaTitle} Trailer`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+        <CastSection cast={cast} />
+
+      <section className="px-6 pb-10 pt-2 md:px-12">
         <h2 className="text-2xl font-bold">More Like This</h2>
         <MediaRow title="" items={recommendations} mediaType={mediaType} />
       </section>
@@ -244,8 +202,8 @@ function ExpandableOverview({ text, expanded, onToggle }) {
     : text
 
   return (
-    <div className="mb-6 max-w-2xl">
-      <p className="text-zinc-200">{displayText}</p>
+    <div className="mb-6 max-w-2xl break-words">
+      <p className="text-zinc-200 leading-relaxed break-words">{displayText}</p>
 
       {shouldTruncate ? (
         <button
