@@ -105,7 +105,7 @@ export default function PersonPage() {
       : bio
 
   return (
-    <main className="min-h-screen bg-[#0A0C12] px-6 py-8 text-white md:px-12">
+    <main className="min-h-screen bg-[#0A0C12] text-white">
       <Helmet>
         <title>
           {personName} | MovieFlix
@@ -116,35 +116,30 @@ export default function PersonPage() {
           content={`Learn more about ${personName}, including biography, birthday, birthplace, and filmography.`}
         />
       </Helmet>
+      <section className="relative min-h-[36vh] top-15 bg-cover bg-center">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#141414] via-black/70 to-black/40" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#141414] via-black/50 to-transparent" />
 
-      <Link
-        to="/"
-        className="mb-8 inline-block text-sm text-zinc-300 transition hover:text-white"
-      >
-        ← Back to Home
-      </Link>
-
-      <section className="grid gap-8 md:grid-cols-[260px_1fr]">
-        <div>
+        <div className="relative z-10 px-6 py-4 md:px-12">
+          <div className="flex flex-col gap-8 md:flex-row md:items-start">
           {person.profile_path ? (
             <img
               src={`${POSTER_BASE_URL}${person.profile_path}`}
               alt={personName}
-              className="w-[260px] rounded-xl shadow-2xl"
+              className="w-[220px] rounded shadow-xl"
             />
           ) : (
             <div className="flex h-[390px] w-[260px] items-center justify-center rounded-xl bg-zinc-800 text-zinc-400">
               No image available
             </div>
           )}
-        </div>
-
-        <div className="max-w-4xl">
-          <h1 className="mb-4 text-4xl font-bold md:text-6xl">
+        
+            <div className="min-w-0 max-w-3xl flex-1">
+              <h1 className="mb-4 text-4xl font-bold md:text-6xl">
             {personName}
           </h1>
 
-          <div className="mb-6 flex flex-wrap gap-3 text-sm text-zinc-300">
+               <div className="mb-4 flex flex-wrap gap-4 text-sm text-zinc-300">
             <span>{knownFor}</span>
             <span>
               Born: {birthday}
@@ -169,6 +164,8 @@ export default function PersonPage() {
               {showFullBio ? 'Show less' : 'Show more'}
             </button>
           ) : null}
+        </div>
+        </div>
         </div>
       </section>
 
