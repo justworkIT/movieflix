@@ -38,7 +38,7 @@ export default function Top20Row({ title, items = [], mediaType = 'movie' }) {
         <button
           type="button"
           onClick={() => scrollRow('left')}
-          className="absolute left-0 top-0 z-20 hidden h-[260px] w-[40px] items-center justify-center rounded-none bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex sm:h-[230px] md:h-[260px]"
+          className="absolute left-0 top-0 z-20 hidden h-full min-h-[190px] w-[40px] items-center justify-center rounded-none bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex"
           aria-label={`Scroll ${title} left`}
         >
           ‹
@@ -49,44 +49,57 @@ export default function Top20Row({ title, items = [], mediaType = 'movie' }) {
           className="flex gap-2 overflow-x-auto px-6 scrollbar-hide snap-x snap-mandatory"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
-{filteredItems.map((item, index) => (
-  <Link
-    key={item.id}
-    to={getDetailsPath(item, mediaType)}
-    className="group/card flex-none snap-start w-[180px]"
-  >
-    
-    <div className="overflow-hidden rounded-2xl border border-white/5 bg-[#141823] shadow-md transition duration-300 group-hover/card:shadow-xl">
-    
-    <div className="relative overflow-hidden rounded-t-2xl">
-      <span className="top10-number absolute right-0 top-0 z-20 text-[48px] font-black leading-none">
-  {index + 1}
-</span>
-      <RegionBadge item={item} />
-      <img
-        src={`${POSTER_BASE_URL}${item.poster_path}`}
-        alt={item.title || item.name}
-        className="h-[200px] w-full object-fill transition duration-300 group-hover/card:scale-125 sm:h-[170px] md:h-[200px]"
-        draggable="false"
-      />
-    </div>
+{filteredItems.map((item, index) => {
+  const cardMediaType = item.media_type || mediaType
+  const isTV = cardMediaType === 'tv'
 
-      {/* Gradient + Title */}
-                <div className="p-2">
-                  <p className="truncate text-sm font-semibold text-white">
-                    {item.title || item.name}
-                  </p>
-                  <p className="mt-1 text-[11px] text-zinc-400 line-clamp-1">{getMediaMeta(item)}</p>
-                </div>
-    </div>
-  </Link>
-))}
+  return (
+    <Link
+      key={item.id}
+      to={getDetailsPath(item, cardMediaType)}
+      className="group/card flex-none snap-start w-[125px] sm:w-[145px] md:w-[165px] lg:w-[180px]"
+    >
+      <div className="overflow-hidden rounded-2xl border border-white/5 bg-[#141823] shadow-md transition duration-300 group-hover/card:shadow-xl">
+        <div className="relative overflow-hidden rounded-t-2xl">
+          <span className="top10-number absolute right-0 top-0 z-20 text-[48px] font-black leading-none">
+            {index + 1}
+          </span>
+
+          <RegionBadge item={item} />
+          <img
+            src={`${POSTER_BASE_URL}${item.poster_path}`}
+            alt={item.title || item.name}
+            className="aspect-[3/4] w-full object-cover transition duration-300 group-hover/card:scale-125"
+            draggable="false"
+          />
+        </div>
+
+        <div className="relative p-2">
+          <p className="truncate text-sm font-semibold text-white">
+            {item.title || item.name}
+          </p>
+          <p className="mt-1 text-[11px] text-zinc-400 line-clamp-1">
+            {getMediaMeta(item)}
+          </p>
+                    <div
+            className={`absolute right-2 bottom-2 z-10 rounded px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-lg ${
+              isTV ? 'bg-green-600' : 'bg-red-600'
+            }`}
+          >
+            {isTV ? 'TV' : 'MOVIE'}
+          </div>
+
+        </div>
+      </div>
+    </Link>
+  )
+})}
         </div>
 
         <button
           type="button"
           onClick={() => scrollRow('right')}
-          className="absolute right-0 top-0 z-20 hidden h-[260px] w-[40px] items-center justify-center rounded-none bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex sm:h-[230px] md:h-[260px]"
+          className="absolute right-0 top-0 z-20 hidden h-full min-h-[190px] w-[40px] items-center justify-center rounded-none bg-black/45 text-3xl text-white transition hover:bg-black/70 md:flex"
           aria-label={`Scroll ${title} right`}
         >
           ›
