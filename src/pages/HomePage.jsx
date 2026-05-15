@@ -93,7 +93,7 @@ const movieRows = [
     title: 'Popular Movies',
     items: popularMovies,
     mediaType: 'movie',
-    seeMorePath: '/browse/popular-movies',
+    seeMorePath: '/watch/movies',
   },
 ]
 
@@ -102,7 +102,7 @@ const tvRows = [
     title: 'Popular TV Shows',
     items: popularTVShows,
     mediaType: 'tv',
-    seeMorePath: '/browse/popular-tv',
+    seeMorePath: '/watch/tv',
   },
 ]
 
@@ -120,7 +120,7 @@ const tvRows = [
       
 <HeroBanner items={heroItems} />
 
-      <main className="relative z-10 -mt-8 space-y-10 px-4 pb-12 md:px-8 lg:px-12">
+      <main className="relative top-15 z-10 space-y-10 px-4 pb-12 md:px-8 lg:px-12">
         {loading && <Loader text="Loading content..." />}
         {error && <ErrorMessage message={error} />}
 
@@ -138,15 +138,9 @@ const tvRows = [
 
         <section className="space-y-8">
           <h3 className="text-4xl font-bold text-red-600 mb-0">TV Shows</h3>
-<Top20Row
-  title="Top 20 TV Shows of the Week"
-  items={trendingTVShows}
-  mediaType="tv"
-  seeMorePath="/browse/trending-tv"
-/>
           <SectionBlock rows={tvRows} />
         </section>
-      </main>
+      </main>     
     </div>
   )
 }
