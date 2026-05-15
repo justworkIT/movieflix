@@ -61,7 +61,7 @@ function HeroBanner({ items = [] }) {
   }
 
   return (
-    <section className="relative h-[50vh] min-h-[380px] w-full overflow-hidden bg-[#141414] text-white">
+    <section className="relative top-15 min-h-[450px] w-full bg-[#141414] text-white">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center transition-all duration-700"
@@ -69,35 +69,13 @@ function HeroBanner({ items = [] }) {
           backgroundImage: `url(${IMAGE_BASE_URL}${currentItem.backdrop_path})`,
         }}
       />
-            {/* Indicators */}
-      {heroItems.length > 1 && (
-        <div className="relative top-18 left-6 z-20 flex gap-2 md:left-12 lg:left-20">
-          {heroItems.map((item, index) => (
-            <button
-              key={item.id}
-              onClick={() => setCurrentIndex(index)}
-              className={`h-1.5 rounded-full transition-all ${
-                index === safeIndex
-                  ? "w-8 bg-red-600"
-                  : "w-4 bg-white/40"
-              }`}
-            />
-          ))}
-        </div>
-      )}
-
-
       {/* Overlays */}
       <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-black/30" />
 
       {/* Content */}
-      <div className="relative z-10 flex h-full items-center px-6 md:px-12 lg:px-20">
-        <div className="max-w-xl pt-0">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.35em] text-red-500">
-            Trending Now
-          </p>
-
+      <div className="relative z-10 flex min-h-[450px] px-12 py-4 md:px-12 md:py-4 lg:px-12">
+        <div className="max-w-xl min-w-0 pt-0">
           <h1 className="mb-4 text-4xl font-black leading-tight md:text-3xl lg:text-4xl">
             {title}
           </h1>
@@ -114,7 +92,7 @@ function HeroBanner({ items = [] }) {
             </span>
           </div>
 
-          <p className="mb-2 line-clamp-3 max-w-lg text-sm leading-relaxed text-gray-200 md:text-base">
+          <p className="mb-6 max-w-lg break-words text-sm leading-relaxed text-gray-200 md:text-base">
             {overview}
           </p>
 
@@ -136,7 +114,6 @@ function HeroBanner({ items = [] }) {
           </div>
         </div>
       </div>
-
       {/* Arrows */}
       {heroItems.length > 1 && (
         <>
@@ -154,6 +131,22 @@ function HeroBanner({ items = [] }) {
             ›
           </button>
         </>
+      )}
+            {/* Indicators */}
+      {heroItems.length > 1 && (
+        <div className="absolute left-1/2 bottom-6 -translate-x-1/2 z-30 mt-0 flex items-center gap-2">
+          {heroItems.map((item, index) => (
+            <button
+              key={item.id}
+              onClick={() => setCurrentIndex(index)}
+              className={`h-1.5 rounded-full transition-all ${
+                index === safeIndex
+                  ? "w-8 bg-red-600"
+                  : "w-4 bg-white/40"
+              }`}
+            />
+          ))}
+        </div>
       )}
     </section>
   )

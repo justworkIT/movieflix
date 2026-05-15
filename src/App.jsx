@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Layout/Navbar'
+import Footer from './components/Layout/Footer'
 import HomePage from './pages/HomePage'
 import DetailsPage from './pages/DetailsPage'
 import PersonPage from './pages/PersonPage'
@@ -19,16 +20,18 @@ export default function App() {
 
 
         <Route path="/search" element={<SearchPage />} />
-<Route path="/watch/:slug/genre/:genreId" element={<SearchPage />} />
-<Route path="/watch/:slug" element={<SearchPage />} /> 
+        <Route path="/watch/:slug/genre/:genreId" element={<SearchPage />} />
+        <Route path="/watch/:slug/region/:regionId" element={<SearchPage />} />
+        <Route path="/watch/:slug" element={<SearchPage />} /> 
         <Route path="/watch/:slug/:id/" element={<PersonPage />} />
         <Route path="/browse/:category" element={<BrowsePage />} />
-        <Route path="/movies" element={<MoviesPage />} />
-        <Route path="/tv" element={<TVShowsPage />} />
+        <Route path="/watch/movies" element={<MoviesPage />} />
+        <Route path="/watch/tv" element={<TVShowsPage />} />
 
         <Route path="/watch/:slug/:mediaType/:id" element={<DetailsPage />} />
   
       </Routes>
+<Footer />
     </>
   )
 }
